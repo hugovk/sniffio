@@ -1,6 +1,6 @@
 name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   Windows:
@@ -9,13 +9,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
           allow-prereleases: true
@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12-dev']
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
         check_formatting: ['0']
         extra_name: ['']
         include:
@@ -46,14 +46,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         if: "!endsWith(matrix.python, '-dev')"
         with:
           python-version: ${{ matrix.python }}
           cache: pip
           cache-dependency-path: test-requirements.txt
       - name: Setup python (dev)
-        uses: deadsnakes/action@v3.0.1
+        uses: deadsnakes/action@v3.2.0
         if: endsWith(matrix.python, '-dev')
         with:
           python-version: '${{ matrix.python }}'
@@ -71,12 +71,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12']
+        python: ['3.7', '3.8', '3.9', '3.10', '3.11', '3.12', '3.13']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
           allow-prereleases: true
